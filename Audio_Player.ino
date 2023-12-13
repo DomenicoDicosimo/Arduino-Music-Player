@@ -4,17 +4,17 @@
 #include <SPI.h> //  need to include the SPI library
 
 TMRpcm tmrpcm; // create an object for use in this sketch
-int temp=1;
-int pp=5;
-int next=6;
-int prev=7;
-int max=4;  //Should be equal to the total number of songs in the SD card
+int CurrentSong=1;
+int PlayPauseButton=5;
+int NextButton=6;
+int PrevButton=7;
+int MaxSongs=4;  //Should be equal to the total number of songs in the SD card
 
 void setup()
 { 
- pinMode(pp,INPUT_PULLUP);
- pinMode(next,INPUT_PULLUP);
- pinMode(prev,INPUT_PULLUP);
+ pinMode(PlayPauseButton,INPUT_PULLUP);
+ pinMode(NextButton,INPUT_PULLUP);
+ pinMode(PrevButton,INPUT_PULLUP);
  
  tmrpcm.speakerPin = 9; //5,6,11 or 46 on Mega, 9 on Uno, Nano, etc
  Serial.begin(9600);
@@ -33,40 +33,40 @@ void setup()
 
 void loop()
 {  
-  while(digitalRead(pp)==0 || digitalRead(next)==0 || digitalRead(prev)==0)
+  while(digitalRead(PlayPauseButton)==0 || digitalRead(NextButton)==0 || digitalRead(PrevButton)==0)
   {
-    if(digitalRead(pp)==0)
+    if(digitalRead(PlayPauseButton)==0)
     {
       tmrpcm.pause();
-      while(digitalRead(pp)==0);
+      while(digitalRead(PlayPauseButton)==0);
       delay(200);
     }
-    else if(digitalRead(next)==0)
+    else if(digitalRead(NextButton)==0)
     {
-      if(temp<max){//temp should be lesser than no. of songs 
-        temp=temp+1;
-        while(digitalRead(next)==0);
+      if(CurrentSong<MaxSongs){//CurrentSong should be lesser than no. of songs 
+        CurrentSong=CurrentSong+1;
+        while(digitalRead(NextButton)==0);
           delay(200);
           song();
       }
       else{  //If song is the last then continue to song 1
-        temp=1; 
-        while(digitalRead(next)==0);
+        CurrentSong=1; 
+        while(digitalRead(NextButton)==0);
           delay(200);
           song();
       }
     }
-    else if(digitalRead(prev)==0)
+    else if(digitalRead(PrevButton)==0)
     {
-      if(temp>1){
-        temp=temp-1;
-        while(digitalRead(prev)==0);
+      if(CurrentSong>1){
+        CurrentSong=CurrentSong-1;
+        while(digitalRead(PrevButton)==0);
         delay(200);
         song();
       }
       else{ //If song is 1 then loops around to the last song in the sd card
-        temp = max;
-        while(digitalRead(prev)==0);
+        CurrentSong = MaxSongs;
+        while(digitalRead(PrevButton)==0);
         delay(200);
         song();
       }
@@ -76,19 +76,19 @@ void loop()
 
 void song (void)
 {
-  if(temp==1)
+  if(CurrentSong==1)
   {
     tmrpcm.play("Song1.wav");  
   }
-  else if(temp==2)
+  else if(CurrentSong==2)
   {
     tmrpcm.play("Song2.wav");  
   }
-  else if(temp==3)
+  else if(CurrentSong==3)
   {
     tmrpcm.play("Song3.wav");  
   }
-  else if(temp==4)
+  else if(CurrentSong==4)
   {
     tmrpcm.play("Song4.wav");  
   }
