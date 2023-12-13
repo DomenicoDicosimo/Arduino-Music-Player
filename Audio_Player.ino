@@ -8,6 +8,8 @@ int temp=1;
 int pp=5;
 int next=6;
 int prev=7;
+int max=4;  //Should be equal to the total number of songs in the SD card
+
 void setup()
 { 
  pinMode(pp,INPUT_PULLUP);
@@ -41,19 +43,33 @@ void loop()
     }
     else if(digitalRead(next)==0)
     {
-      if(temp<4)//temp should be lesser than no. of songs 
-      temp=temp+1;
-      while(digitalRead(next)==0);
-      delay(200);
-      song();
+      if(temp<max){//temp should be lesser than no. of songs 
+        temp=temp+1;
+        while(digitalRead(next)==0);
+          delay(200);
+          song();
+      }
+      else{  //If song is the last then continue to song 1
+        temp=1; 
+        while(digitalRead(next)==0);
+          delay(200);
+          song();
+      }
     }
     else if(digitalRead(prev)==0)
     {
-      if(temp>1)
-      temp=temp-1;
-      while(digitalRead(prev)==0);
-      delay(200);
-      song();
+      if(temp>1){
+        temp=temp-1;
+        while(digitalRead(prev)==0);
+        delay(200);
+        song();
+      }
+      else{ //If song is 1 then loops around to the last song in the sd card
+        temp = max;
+        while(digitalRead(prev)==0);
+        delay(200);
+        song();
+      }
     }
   }
 }
