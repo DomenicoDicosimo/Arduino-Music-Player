@@ -9,7 +9,7 @@ int PlayPauseButton=5;
 int NextButton=6;
 int PrevButton=7;
 int MaxSongs=4;  //Should be equal to the total number of songs in the SD card
-int PlayPauseStatus=0
+int PlayPauseStatus=0;
 
 void setup()
 { 
@@ -38,15 +38,9 @@ void loop()
   {
     if(digitalRead(PlayPauseButton)==0) //If the PlayPauseButton is pressed
     {
-      if(PlayPauseStatus=0){ //If the button is set to play
-        PlayPauseStatus=1;
-        tmrpcm.pause(); // Pause Player
-        delay(200);
-      }
-      else{ //If the button is set to pause
-        tmrpcm.play(); //Play PLayer
-        PlayPauseStatus=0;
-      }
+      tmrpcm.pause(); // Pause Player
+      while(digitalRead(PlayPauseButton)==0);
+      delay(200);
     }
     else if(digitalRead(NextButton)==0)
     {
